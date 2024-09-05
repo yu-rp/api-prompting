@@ -1,0 +1,162 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <title>API: Attention Prompting on Image for Large Vision-Language Models</title>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/css/bootstrap.min.css" />
+    <link rel="stylesheet" type="text/css" href="website/css/style.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+    <link rel="icon" href="website/img/cloudy_5.png" type="image/icon type">
+
+    <script src="https://code.hcharts.cn/highcharts/highcharts.js"></script>
+    <script src="https://code.hcharts.cn/highcharts/modules/exporting.js"></script>
+    <script src="https://code.hcharts.cn/highcharts/modules/sankey.js"></script>
+    <script src="https://code.iconify.design/iconify-icon/1.0.7/iconify-icon.min.js"></script>
+    <script type="module" src="https://gradio.s3-us-west-2.amazonaws.com/3.42.0/gradio.js"></script>>
+</head>
+
+<body>
+    <div id="nav">
+        <div id="icon">
+            <a id="nav-button-kokomind" class="nav-button" href="#"><img src="website/img/cloudy_5.png" alt="api logo"
+                    width="40" class="logo"> &nbsp; SoM-GPT4V
+            </a>
+        </div>
+        <div>
+            <a class="nav-button" href="#introduction">Introduction</a>
+            <a class="nav-button" href="#playground">Playground</a>
+            <a class="nav-button" href="#examples">Examples</a>
+            <a class="nav-button" href="#results">Results</a>
+            <!-- <a class="nav-button" href="#evaluation">Results</a>
+            <a class="nav-button" href="#limitation">Limitations</a>
+            <a class="nav-button" href="#license">License</a>
+            <a class="nav-button" href="#acknowledgement">Acknowledgement</a> -->
+            <a class="nav-button" href="#citation">Misc</a>
+        </div>
+    </div>
+    <br>
+    <div class="container" style="padding-left: 100px; padding-right: 100px;">
+        <div class="myhead" style="margin-bottom: 0em;">
+            <div class="row">
+
+                <div class="row align-items-center">
+                    <!-- <div class="col-md-2 d-flex align-items-center justify-content-center">
+                        <img src="website/img/som.png" alt="som logo" width="80" class="logo">
+                    </div> -->
+                    <div class="col-md-11 offset-md-1 d-flex align-items-center">
+                        <h1>
+                            <span style="color: var(--koko-color)">
+                                API
+                            </span>
+                            <span style="color: var(--mind-color)"></span>: Attention Prompting on Image <br> 
+                        </h1>
+                    </div>
+                </div>
+            </div>
+            <div class="row">
+                <div class="row align-items-center">
+                    <div class="col-md-11 offset-md-1 d-flex align-items-center">
+                        <h2>Add an adaptive mask onto the image to enhance LVLM performance.</h2>
+                    </div>
+                </div>
+            </div>
+            <div class="row">
+                <h3 class="blog-author">
+                    <!-- <a href="https://jwyang.github.io/" style="color:#00A4EF;font-weight:normal;">Jianwei
+                        Yang<sup>*&#x2691;</sup></a>,
+                    <a href="https://scholar.google.com/citations?user=B8hPxMQAAAAJ&hl=en"
+                        style="color:#c86cdf;font-weight:normal;">Hao Zhang<sup>*</sup></a>,
+                    <a href="https://fengli-ust.github.io/" style="color:#c86cdf;font-weight:normal;">Feng
+                        Li<sup>*</sup></a>,
+                    <a href="https://maureenzou.github.io/" style="color:#ec7c37;font-weight:normal;">Xueyan
+                        Zou<sup>*</sup></a>,
+                    <a href="https://chunyuan.li/" style="color:#00A4EF;font-weight:normal;">Chunyuan Li</a>,
+                    <a href="https://www.microsoft.com/en-us/research/people/jfgao/"
+                        style="color:#00A4EF;font-weight:normal;">Jianfeng Gao<sup></sup></a> -->
+                    Runpeng Yu; Weihang Yu; Xinchao Wang
+                </h3>
+                <h3 class="blog-uni">
+                    <!-- <span class="author-block"><b style="color:#00A4EF; font-weight:normal">&#x25B6 </b>Microsoft
+                        Research, Redmond; </span>
+                    <span class="author-block"><b style="color:#c86cdf; font-weight:normal">&#x25B6 </b>HKUST; </span>
+                    <span class="author-block"><b style="color:#ec7c37; font-weight:normal">&#x25B6 </b> University of
+                        Wisconsin-Madison; </b></span> -->
+                    National University of Singapore
+                </h3>
+                <!-- <h3 class="blog-mark">
+                    <span class="author-block"><sup>*</sup>Core Contribution, </span>
+                    <span class="author-block"><sup>&#x2691;</sup>Project Lead </span>
+                </h3> -->
+
+                <p style="font-size: 16px; text-align: center; margin-top: 10px;">
+                    <a href="https://arxiv.org/abs/"><iconify-icon icon="simple-icons:arxiv"></iconify-icon> [arXiv]&nbsp&nbsp</a> <a href="https://github.com/"><i class="fa fa-github"></i>&nbsp[Code]</a>
+                </p>
+            </div>
+        </div>
+    </div>
+
+    <br>
+    <div class="container" style="padding-left: 130px; padding-right: 130px;">
+
+        <section id="introduction">
+            <h2>Introduction </h2>
+            <p style="padding-left: 30px; padding-right: 30px; text-align: justify;">
+                The process of using Attention Prompting on Image (API) in VQA involves two steps. First, employ an auxiliary LVLM to generate a mask. Second, overlay the mask on the original image before performing inference. For instance, an auxiliary CLIP can be used to calculate the similarity between each image patch and the query. Patches with low similarity are assigned a heavier mask, while patches with high similarity remain unmasked. Such mask serves as a visual cue to guide the VLM during inference, directing attention to regions of the image relevant to the question.
+            </p>
+            <img src="website/img/resized_HeadImage_1.png" alt="HeadImage" style="width:90%; display: block; margin: 0 auto;"">
+            <br>
+            <p style="padding-left: 30px; padding-right: 30px; text-align: justify;">
+                Here is an example comparing our API method with the naive VQA method without prompting. The question in the example is particularly challenging, testing the VLM's abilities in visual grounding and spatial attribute reasoning. The API-generated mask reduced the difficulty of the visual grounding task, highlighting the red bird mentioned in the query.
+            </p>
+            <img src="website/img/resized_HeadImage_2.png" alt="HeadImage" style="width:90%; display: block; margin: 0 auto;"">
+        </section>
+
+        <section id="playground">
+            <h2>Play with API</h2>
+            <div class="container is-max-desktop" id="gradio">
+                <gradio-app src=""></gradio-app>
+            </div>
+        </section>
+
+        <section id="examples">
+            <h2>Examples </h2>
+            <p>
+                <img src="website/img/resized_case01.png" alt="example" style="width:90%; display: block; margin: 0 auto;"">
+                <img src="website/img/resized_case02.png" alt="example" style="width:90%; display: block; margin: 0 auto;"">
+                <img src="website/img/resized_case03.png" alt="example" style="width:90%; display: block; margin: 0 auto;"">
+                <img src="website/img/resized_case04.png" alt="example" style="width:90%; display: block; margin: 0 auto;"">
+                <img src="website/img/resized_case05.png" alt="example" style="width:90%; display: block; margin: 0 auto;"">
+                <img src="website/img/resized_case06.png" alt="example" style="width:90%; display: block; margin: 0 auto;"">
+                <img src="website/img/resized_case07.png" alt="example" style="width:90%; display: block; margin: 0 auto;"">
+                <img src="website/img/resized_case08.png" alt="example" style="width:90%; display: block; margin: 0 auto;"">
+                <img src="website/img/resized_case09.png" alt="example" style="width:90%; display: block; margin: 0 auto;"">
+                <img src="website/img/resized_case10.png" alt="example" style="width:90%; display: block; margin: 0 auto;"">
+                <img src="website/img/resized_case11.png" alt="example" style="width:90%; display: block; margin: 0 auto;"">
+            </p>
+        </section>
+
+        <section id="results">
+            <h2>Results</h2>
+            <p>
+                <img src="website/img/main_table.webp" alt="results" style="width:90%; display: block; margin: 0 auto;"">
+            </p>
+        </section>
+
+        <section id="citation">
+            <h2>Citation</h2>
+            <bib>
+                @misc{yu2024api, <br>
+                &nbsp&nbsp title = {API: Attention Prompting on Image for Large Vision-Language Models}, <br>
+                &nbsp&nbsp url = {https://arxiv.org/abs/}, <br>
+                &nbsp&nbsp author={Runpeng Yu and Weihao Yu and Xinchao Wang}, <br>
+                &nbsp&nbsp year = {2024}, <br>
+                &nbsp&nbsp proceeding = {European Conference on Computer Vision ECCV 2024}, <br>
+                }
+            </bib>
+            <h2>Acknowledgement</h2>
+            This website is built based on the project page of <a href="https://github.com/som-gpt4v/som-gpt4v.github.io/tree/main>">SoM-GPT4V</a> project.
+        </section>
+    </div>
+</body>
+
+</html>
